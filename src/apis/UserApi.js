@@ -16,7 +16,6 @@ const UseApi = {
           name : loginData.account,
           password : loginData.password
         })
-        localStorage.removeItem("token")
         localStorage.setItem("token",data.data.token)
         console.log(data.data)
       } catch (error) {
