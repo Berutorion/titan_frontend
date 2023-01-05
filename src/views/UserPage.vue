@@ -6,11 +6,12 @@ import dayjs from "dayjs"
 import router  from '../router'
 import UserApi from "../apis/UserApi"
 import getDistance from 'geolib/es/getDistance';
-
+import Modal from '../components/Modal.vue'
+import qrReader from '../components/QRcodeReader.vue'
 const userData = ref({})
 const AtWork = ref(false)
 const button = ref(false)
-
+const showModal = ref(false)
 onMounted( async() =>{
   userData.value = await UserApi.getUser()
   AtWork.value = userData.value.data.AtWork
@@ -42,7 +43,6 @@ function test(){
 
  async function check(){
   const distance = await GPSAuthenticate()
-  console.log('dis' , distance)
   if(distance < 400){
     AtWork.value = UserApi.check(dayjs().format("YYYY/MM/DD HH:mm"),userData.value.data.user,AtWork)
     alert('打卡成功')
@@ -76,8 +76,23 @@ function logout(){
   <button v-if="AtWork" @click="check" v-bind:disabled="button">下班</button>
   <button v-else @click="check" v-bind:disabled="button">上班</button>
   <button @click="GPSAuthenticate">取得現在位置</button>
-  <button @click="logout">登出</button>
+  <button class="btn btn-primary" @click="logout">登出</button>
     </div>  
+
+<button id="show-modal" @click="showModal = true">Show Modal</button>
+
+<Teleport to="body">
+  <!-- use the modal component, pass in the prop -->
+  <modal :show="showModal" @close="showModal = false">
+    <template #header>
+      <h3>custom header</h3>
+    </template>
+    <template #body>
+     <qrReader></qrReader>
+    </template>
+  </modal>
+</Teleport>
+
 </template>
 
 

@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-const token = localStorage.getItem("token")
+const getToken = () =>localStorage.getItem("token")
 const instance = axios.create({
   baseURL:"http://localhost:8080/api",
-  timeout:1000,
-  headers: { Authorization: `Bearer ${token}` }
+  timeout:1000 ,
+  headers: { Authorization: `Bearer ${getToken()}` }
 })
 
 const UseApi = {
@@ -40,18 +40,34 @@ const UseApi = {
         return true // AtWork.value
       }
       } catch (error) {
-        console.log(error)
+        throw new Error(error)
+      }
+    },
+    //qrcode打卡
+    qrcodeCheck :async(checkData) =>{
+      try {
+        const res = await instance.post('/user/qrcodeCheck',checkData)
+        return res
+      } catch (error) {
+        throw new Error(error)
+      }
+      
+    },
+    gerQRauth :async(time) =>{
+      try {
+        const res = await instance.get(`/admin/qrcode?${time}`)
+        return res.data.authNum
+      } catch (error) {
+        throw new Error(error)
       }
     },
     //驗證
     getUser : async() =>{
-      console.log("token" , token)
-      if(!token) return false
       try {
         const data  = await instance.get("/user")
         return data
       } catch (error) {
-       // console.log(error)
+       console.log(error)
         return false
       }
   

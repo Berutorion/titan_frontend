@@ -10,9 +10,12 @@
   },
   "dependencies": {
     "axios": "^1.2.1",
+    "crypto-js": "^4.1.1",
     "dayjs": "^1.11.7",
     "geolib": "^3.3.3",
+    "qrcode-vue3": "^1.4.17",
     "vue": "^3.2.45",
+    "vue-qrcode-reader": "^3.1.0-vue3-compatibility.2",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
