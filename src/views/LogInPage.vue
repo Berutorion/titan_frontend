@@ -3,7 +3,6 @@
 import {reactive, ref} from 'vue'
 import UserApi from "../apis/UserApi"
 import router  from '../router'
-import LoginFormVue from '../components/LoginForm.vue';
 const loginData = reactive({account:"",password:"",})
 
 async function login(){
