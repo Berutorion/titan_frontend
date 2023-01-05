@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const getToken = () =>localStorage.getItem("token")
 const instance = axios.create({
-  baseURL:"http://localhost:8080/api",
+  baseURL:"https://twitter-api.ap-northeast-1.elasticbeanstalk.com/api",
   timeout:1000 ,
   headers: { Authorization: `Bearer ${getToken()}` }
 })
@@ -17,9 +17,9 @@ const UseApi = {
           password : loginData.password
         })
         localStorage.setItem("token",data.data.token)
-        console.log(data.data)
+        return data
       } catch (error) {
-        console.log(error)
+        return error
       }
     },
     //打卡
