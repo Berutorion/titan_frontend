@@ -16,6 +16,8 @@ echo > .nojekyll
 # 如果你要部署到自定义域名
 # echo 'www.example.com' > CNAME
 
+git init
+git checkout -B master
 git add -A
 git commit -m 'deploy'
 

@@ -8,7 +8,7 @@ const loginData = reactive({account:"",password:"",})
 async function login(){
   try {
     const res = await UserApi.Login(loginData)
-    if(res.data.status === "seccess"){
+    if(res.data.status === "success"){
       router.push('/')
     }else{
       alert("登入失敗")
