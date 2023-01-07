@@ -8,8 +8,10 @@ const loginData = reactive({account:"",password:"",})
 async function login(){
   try {
     const res = await UserApi.Login(loginData)
-    if(res.data.status === "success"){
+    if(res.data.role === "user"){
       router.push('/')
+    }else if(res.data.role === "admin"){
+      router.push('/admin')
     }else{
       alert("登入失敗")
     }   

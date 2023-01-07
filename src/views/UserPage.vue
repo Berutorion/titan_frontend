@@ -1,45 +1,37 @@
 
 <script setup>
-import {onMounted, reactive, ref} from 'vue'
-import axios from 'axios'
+import {onMounted, ref} from 'vue'
 import dayjs from "dayjs"
 import router  from '../router'
 import UserApi from "../apis/UserApi"
 import getDistance from 'geolib/es/getDistance';
-import Modal from '../components/Modal.vue'
 import qrReader from '../components/QRcodeReader.vue'
+import Clock from "../components/Clock.vue"
+import CardPageVue from '../components/CardPage.vue'
+import isHolidayfunc from "../helper/isHoliday"
+
 const userData = ref({})
 const AtWork = ref(false)
-const button = ref(false)
-const showModal = ref(false)
+const checkButton = ref("上班")
+const isHoliday = ref(false)
+
+
 onMounted( async() =>{
-  userData.value = await UserApi.getUser()
-  AtWork.value = userData.value.data.AtWork
+  // userData.value = await UserApi.getUser()
+  // AtWork.value = userData.value.data.AtWork
+  if(isHolidayfunc()){
+    console.log("isHoliday")
+    isHoliday.value = true
+    checkButton.value = "今日休假"
+  }else{
+    if(AtWork.value){
+      checkButton.value = "下班"
+    }else{
+      checkButton.value = "上班"
+    }
+  }
 })
 
-function data(){
-  axios.get("https://cdn.jsdelivr.net/gh/ruyut/TaiwanCalendar/data/2023.json")
-  .then((res) =>{
-    console.log(res)
-  })
-  .catch((err) =>{
-    console.log(err)
-  })
-}
-
-function test(){
-  console.log("userData" , userData.value)
-  console.log(userData.value.data.AtWork)
-  // axios.get("http://localhost:8080/test",
-  // {headers: { Authorization: `Bearer ${token.value}` },
-  //   })
-  // .then((res) =>{
-  //   console.log(res.data)
-  // })
-  // .catch((err) =>{
-  //   console.log(err.response.data)
-  // })
-}
 
  async function check(){
   const distance = await GPSAuthenticate()
@@ -70,32 +62,62 @@ function logout(){
 </script>
 
 <template>
+<div class="container mt-4 mb-4 p-3 d-flex align-items-center vstack">
+  <Clock></Clock>
+  <ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="#">Active</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Link</a>
+  </li>
+</ul>
+ <CardPageVue v-if="true" >
+  <template #header>
+    <h1>Hello</h1>
+  </template>
+  <template #body>
     <div>
+      <span>上班時間:12:00</span>
+      <span>下班時間:12:00</span>
+    </div>
+  </template>
+  <template #footer>
+      <button class=" btn-secondary btncard" v-bind:disabled="isHoliday" @click="check">{{checkButton}}</button>
+  </template>
+ </CardPageVue>
+
+ <CardPageVue v-else-if="false">
+  <template #header>
+    <span>QRcode打卡</span>
+  </template>
+  <template #body>
+    <qrReader></qrReader>
+  </template>
+ </CardPageVue>
+</div>
+
+    <!-- <div>
       <p>User data</p>
   <button @click='test'>Test</button>
   <button v-if="AtWork" @click="check" v-bind:disabled="button">下班</button>
   <button v-else @click="check" v-bind:disabled="button">上班</button>
   <button @click="GPSAuthenticate">取得現在位置</button>
   <button class="btn btn-primary" @click="logout">登出</button>
-    </div>  
+    </div>   -->
 
-<button id="show-modal" @click="showModal = true">Show Modal</button>
+<!-- <button id="show-modal" @click="showModal = true">Show Modal</button> -->
 
-<Teleport to="body">
-  <!-- use the modal component, pass in the prop -->
-  <modal :show="showModal" @close="showModal = false">
-    <template #header>
-      <h3>custom header</h3>
-    </template>
-    <template #body>
-     <qrReader></qrReader>
-    </template>
-  </modal>
-</Teleport>
 
 </template>
 
 
 <style>
+
+.btncard {
+    height: 140px;
+    width: 140px;
+    border-radius: 50%
+}
 
 </style>

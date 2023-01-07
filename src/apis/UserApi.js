@@ -2,9 +2,9 @@ import axios from 'axios'
 
 const getToken = () =>localStorage.getItem("token")
 const instance = axios.create({
-  baseURL:"https://twitter-api.ap-northeast-1.elasticbeanstalk.com/api",
-  timeout:1000 ,
-  headers: { Authorization: `Bearer ${getToken()}` }
+  // baseURL:"https://twitter-api.ap-northeast-1.elasticbeanstalk.com/api",
+  baseURL:"http://localhost:8080/api",
+  timeout:1000
 })
 
 const UseApi = {
@@ -16,6 +16,7 @@ const UseApi = {
           name : loginData.account,
           password : loginData.password
         })
+        localStorage.removeItem('token')
         localStorage.setItem("token",data.data.token)
         return data
       } catch (error) {
@@ -30,13 +31,13 @@ const UseApi = {
          const res = await instance.post(`/user/check`,{
           jobId:user.id,
           time:time//dayjs().valueof()
-        })
+        },{headers: { Authorization: `Bearer ${getToken()}` }})
       }else{
         //上班
         const res = await instance.post(`/user/check`,{
           jobId:user.id,
           time:time
-        })
+        },{headers: { Authorization: `Bearer ${getToken()}` }})
         return true // AtWork.value
       }
       } catch (error) {
@@ -46,7 +47,9 @@ const UseApi = {
     //qrcode打卡
     qrcodeCheck :async(checkData) =>{
       try {
-        const res = await instance.post('/user/qrcodeCheck',checkData)
+        const res = await instance.post('/user/qrcodeCheck',checkData,{
+          headers: { Authorization: `Bearer ${getToken()}` }
+        })
         return res
       } catch (error) {
         throw new Error(error)
@@ -55,7 +58,9 @@ const UseApi = {
     },
     gerQRauth :async(time) =>{
       try {
-        const res = await instance.get(`/admin/qrcode?${time}`)
+        const res = await instance.get(`/admin/qrcode?${time}`,{
+          headers: { Authorization: `Bearer ${getToken()}` }
+        })
         return res.data.authNum
       } catch (error) {
         throw new Error(error)
@@ -64,7 +69,9 @@ const UseApi = {
     //驗證
     getUser : async() =>{
       try {
-        const data  = await instance.get("/user")
+        const data  = await instance.get("/user" ,{
+          headers: { Authorization: `Bearer ${getToken()}` }
+        })
         return data
       } catch (error) {
        console.log(error)

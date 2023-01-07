@@ -2,7 +2,7 @@ import {createRouter , createWebHistory} from 'vue-router'
 import Userpage from "../views/UserPage.vue"
 import LogInPage from "../views/LogInPage.vue"
 import QRcodePage from "../views/QRcodePage.vue"
-import UserApi from '../apis/UserApi'
+import AdminPage from "../views/AdminPage.vue"
 const router = createRouter({
     history: createWebHistory(),
     routes:[
@@ -21,15 +21,22 @@ const router = createRouter({
             name:'qrcode',
             component: QRcodePage
         },
+        {
+            path:"/admin",
+            name:'qrcode',
+            component: QRcodePage
+        },
     ]
 })
 
-router.beforeEach(async(to) =>{
-    const user = await UserApi.getUser()
-    if(to.name !== 'login' && !user){
-        console.log('驗證失敗' ,user )
-        return {name:"login"}
-    }
-})
+// router.beforeEach(async(to) =>{
+//     const token = localStorage.getItem("token")
+//     if(to.name !== 'login' && !token ){
+//         console.log('驗證失敗')
+//         return {name:"login"}
+//     }else if(!to.name){
+//         return {name:"login"}
+//     }
+// })
 
 export default router
