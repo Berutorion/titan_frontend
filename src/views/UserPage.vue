@@ -1,6 +1,6 @@
 
 <script setup>
-import {onMounted, ref} from 'vue'
+import {onMounted, ref,inject,toRef} from 'vue'
 import dayjs from "dayjs"
 import router  from '../router'
 import UserApi from "../apis/UserApi"
@@ -10,7 +10,8 @@ import Clock from "../components/Clock.vue"
 import CardPageVue from '../components/CardPage.vue'
 import isHolidayfunc from "../helper/isHoliday"
 
-const userData = ref({})
+const mapStore = inject("mapStore")
+const currentUser = toRef(mapStore.state,"currentUser")
 const AtWork = ref(false)
 const checkButton = ref("上班")
 const isHoliday = ref(false)
@@ -18,10 +19,8 @@ const gpspage = ref(true)
 
 
 onMounted( async() =>{
-  // userData.value = await UserApi.getUser()
-  // AtWork.value = userData.value.data.AtWork
+  AtWork.value = currentUser.value.userData.AtWork
   if(isHolidayfunc()){
-    console.log("isHoliday")
     isHoliday.value = true
     checkButton.value = "今日休假"
   }else{
@@ -37,7 +36,7 @@ onMounted( async() =>{
  async function check(){
   const distance = await GPSAuthenticate()
   if(distance < 400){
-    AtWork.value = UserApi.check(dayjs().format("YYYY/MM/DD HH:mm"),userData.value.data.user,AtWork)
+    AtWork.value = UserApi.check(dayjs().format("YYYY/MM/DD HH:mm"),currentUser.value.userData.id,AtWork)
     alert('打卡成功')
   }else{
     alert(`不再公司打卡範圍內，目前距離公司${distance}`)

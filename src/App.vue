@@ -1,6 +1,10 @@
 <script setup>
 import BottomNavigationVue from './components/BottomNavigation.vue';
 import Navbar from "./components/NavBar.vue"
+import { provide } from 'vue';
+import store from './store';
+
+provide("mapStore" , store)
 </script>
 
 

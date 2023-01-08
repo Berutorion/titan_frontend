@@ -1,22 +1,30 @@
 
 <script setup>
-import {reactive, ref} from 'vue'
+import {reactive,inject, toRef} from 'vue'
 import UserApi from "../apis/UserApi"
 import router  from '../router'
 const loginData = reactive({account:"",password:"",})
-
+const mapStore = inject("mapStore")
+const currentUser = toRef(mapStore.state,"currentUser")
 async function login(){
   try {
     const res = await UserApi.Login(loginData)
-    if(res.data.role === "user"){
+    if(res.data.status === 'success'){
+      //更新目前使用者資料
+    await mapStore.setcurrentUser()
+    await mapStore.setToken(res.data.token)
+      if(currentUser.value.userData.role === "user"){
       router.push('/')
-    }else if(res.data.role === "admin"){
+    }else if(currentUser.value.userData.role === "admin"){
       router.push('/admin')
+    }
     }else{
-      alert("登入失敗")
-    }   
-  } catch (error) {
+      alert(res.data.message) 
+    }
     
+  } catch (error) {
+    console.log(error)
+    alert(error)
   }
 
 
