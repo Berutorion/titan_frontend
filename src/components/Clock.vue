@@ -28,7 +28,7 @@ function getNow(){
 
 
 <template>
-    <div class="clock raw">
+<div class="clock raw">
     <p class="date">{{ date }}</p>
     <p class="time">{{ time }}</p>
 </div>

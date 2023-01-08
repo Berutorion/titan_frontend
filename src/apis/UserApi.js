@@ -78,6 +78,12 @@ const UseApi = {
         return false
       }
   
+    },
+    updateUser : async(userData) =>{
+      const res = instance.patch("/user",userData,{
+        headers: { Authorization: `Bearer ${getToken()}` }
+      })
+      return res
     }
 }
 

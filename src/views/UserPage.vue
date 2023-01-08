@@ -14,6 +14,7 @@ const userData = ref({})
 const AtWork = ref(false)
 const checkButton = ref("上班")
 const isHoliday = ref(false)
+const gpspage = ref(true)
 
 
 onMounted( async() =>{
@@ -55,24 +56,33 @@ onMounted( async() =>{
  return getDistance(company,current) //單位公尺
 }
 
-function logout(){
-  localStorage.removeItem('token')
-  router.push("/login")
+function switchPage(event) {
+  const parent = event.target.parentElement.parentElement.children
+  parent.forEach((item) =>{
+    item.firstChild.classList.remove("active")
+  })
+  event.target.classList.add("active")
+  gpspage.value = event.target.textContent === "GPS"?true:false
+
 }
+
 </script>
 
 <template>
-<div class="container mt-4 mb-4 p-3 d-flex align-items-center vstack">
-  <Clock></Clock>
-  <ul class="nav nav-tabs">
+<div class="container-fluid mt-4 mb-4 p-3 d-flex align-items-center vstack">
+  <div class="raw">
+    <Clock></Clock>
+  </div>
+  <div class="raw">
+    <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="#">Active</a>
+    <button  class="nav-link active" @click="switchPage" >GPS</button>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">Link</a>
+    <button class="nav-link" @click="switchPage">QRcode</button>
   </li>
 </ul>
- <CardPageVue v-if="true" >
+ <CardPageVue v-if="gpspage" >
   <template #header>
     <h1>Hello</h1>
   </template>
@@ -87,7 +97,7 @@ function logout(){
   </template>
  </CardPageVue>
 
- <CardPageVue v-else-if="false">
+ <CardPageVue v-else>
   <template #header>
     <span>QRcode打卡</span>
   </template>
@@ -96,6 +106,9 @@ function logout(){
   </template>
  </CardPageVue>
 </div>
+  </div>
+ 
+  
 
     <!-- <div>
       <p>User data</p>

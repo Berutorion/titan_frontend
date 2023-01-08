@@ -1,8 +1,10 @@
 import {createRouter , createWebHistory} from 'vue-router'
 import Userpage from "../views/UserPage.vue"
 import LogInPage from "../views/LogInPage.vue"
+import UserSettingPage from "../views/UserSettingPage.vue"
 import QRcodePage from "../views/QRcodePage.vue"
 import AdminPage from "../views/AdminPage.vue"
+
 const router = createRouter({
     history: createWebHistory(),
     routes:[
@@ -15,6 +17,11 @@ const router = createRouter({
             path:"/login",
             name:'login',
             component: LogInPage
+        },
+        {
+            path:"/usersetting",
+            name:'userSetting',
+            component: UserSettingPage
         },
         {
             path:"/qrcode",
