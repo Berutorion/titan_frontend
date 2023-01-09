@@ -20,9 +20,12 @@ onMounted(async() =>{
 </script>
 
 <template>
-    <div>
+    <div class="container-fluid image align-items-center  justify-content-center" >
         <QRCodeVue3
-          v-bind:value="value"
+          :value="value"
+          myclass="raw mt-4"
+          imgclass=" mx-auto d-block"
         />
+
     </div>
 </template>

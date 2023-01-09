@@ -2,8 +2,8 @@ import axios from 'axios'
 import Toast from '../helper/toast'
 const getToken = () =>localStorage.getItem("token")
 const instance = axios.create({
-  //baseURL:"https://twitter-api.ap-northeast-1.elasticbeanstalk.com/api",
-  baseURL:"http://localhost:8080/api",
+  baseURL:"https://twitter-api.ap-northeast-1.elasticbeanstalk.com/api",
+ // baseURL:"http://localhost:8080/api",
   validateStatus:(status) =>{ return status <=500},
   timeout:1000
 })
@@ -67,7 +67,7 @@ const UseApi = {
         })
         return res.data
       } catch (error) {
-       console.log(error)
+       throw new Error(error)
       }
   
     },

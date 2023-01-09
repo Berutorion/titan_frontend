@@ -14,7 +14,6 @@ async function login(){
     if(res.status === 200){
       //更新目前使用者資料
     await mapStore.setcurrentUser()
-    console.log(currentUser.value)
     mapStore.setToken(res.data.token)
     mapStore.setIsLogin(true)
     if(currentUser.value.userData.role === "user"){

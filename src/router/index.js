@@ -34,7 +34,7 @@ const router = createRouter({
         {
             path:"/admin",
             name:'admin',
-            component: AdminPage
+            component: QRcodePage
         },
         {
             path:"/test",

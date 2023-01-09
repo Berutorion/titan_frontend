@@ -7,6 +7,7 @@ import getDistance from 'geolib/es/getDistance';
 import isHolidayfunc from "../helper/isHoliday"
 import Swal from 'sweetalert2' 
 import Toast from '../helper/toast';
+import dateTime from '../helper/dateTime';
 import qrReader from '../components/QRcodeReader.vue'
 import Clock from "../components/Clock.vue"
 import CardPageVue from '../components/CardPage.vue'
@@ -32,7 +33,7 @@ onMounted( async() =>{
     const distance = await GPSAuthenticate()
     Swal.close()
   if(distance < 400){
-    const res = await UserApi.check(dayjs().format("YYYY/MM/DD HH:mm")
+    const res = await UserApi.check(dateTime.timeFormat()
     ,currentUser.value.userData.id
     ,currentUser.value.userData.AtWork)
 
