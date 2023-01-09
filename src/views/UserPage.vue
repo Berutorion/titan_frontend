@@ -19,17 +19,7 @@ const isHoliday = ref(false)
 const gpspage = ref(true)
 
 onMounted( async() =>{
-  AtWork.value = currentUser.value.userData.AtWork
-  if(isHolidayfunc()){
-    isHoliday.value = true
-    checkButton.value = "今日休假"
-  }else{
-    if(AtWork.value){
-      checkButton.value = "下班"
-    }else{
-      checkButton.value = "上班"
-    }
-  }
+  isHoliday.value = isHolidayfunc()
 })
 
  async function check(){
@@ -43,8 +33,10 @@ onMounted( async() =>{
     const distance = await GPSAuthenticate()
     Swal.close()
   if(distance < 400){
-    const {res , atwork} = await UserApi.check(dayjs().format("YYYY/MM/DD HH:mm"),currentUser.value.userData.id,AtWork)
-    AtWork.value = atwork
+    const res = await UserApi.check(dayjs().format("YYYY/MM/DD HH:mm")
+    ,currentUser.value.userData.id
+    ,currentUser.value.userData.AtWork)
+
     if(res.status === 200){
       Toast.fire({
         title:res.data.message,
@@ -60,7 +52,7 @@ onMounted( async() =>{
   }else{
     Swal.fire({
     title: 'Gps 打卡',
-    text: `不在公司打卡範圍內，目前距離公司${distance}`,
+    text: `不在公司打卡範圍內，目前距離公司${distance}公尺`,
     icon:"warning",
     allowOutsideClick: false,
         });
@@ -84,7 +76,7 @@ onMounted( async() =>{
 
  async function GPSAuthenticate(){
  //const company = {latitude : 25.057459343450386 , longitude : 121.61232863636423} //泰坦
-  const company = {latitude : 25.061569349345806 , longitude : 121.58717196531568} //圖書館25.061569349345806, 121.58717196531568
+  const company = {latitude : 25.069332825223736, longitude :121.58932891026197} //圖書館 25.069332825223736, 121.58932891026197
   const position = await new Promise((resolve, reject) => {
           navigator.geolocation.getCurrentPosition(resolve, reject);
         });
@@ -131,7 +123,14 @@ function switchPage(event) {
     </div>
   </template>
   <template #footer>
-      <button class=" btn-secondary btncard" v-bind:disabled="isHoliday" @click="check">{{checkButton}}</button>
+      <div v-if="isHoliday">
+        <button class=" btn-secondary btncard" v-bind:disabled="isHoliday" @click="check">今日休假</button>
+      </div>
+      <div v-else>
+        <button class=" btn-secondary btncard" v-if="currentUser.userData.AtWork" v-bind:disabled="isHoliday" @click="check">下班</button>
+        <button class=" btn-secondary btncard" v-else v-bind:disabled="isHoliday" @click="check">上班</button>
+      </div>
+      
   </template>
  </CardPageVue>
 
