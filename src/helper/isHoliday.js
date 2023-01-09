@@ -1,9 +1,11 @@
 
 import calendar from "./2023.json"
 import dayjs from "dayjs"
+import mapStore from "../store"
 
 export default () => {
-    const now = dayjs()
+    console.log(mapStore.testData.day)
+    const now = dayjs(mapStore.testData.day)
     let start = 0
     let end = calendar.length
     let middle = Math.floor((end+start)/2)

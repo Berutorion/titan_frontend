@@ -4,6 +4,7 @@ import LogInPage from "../views/LogInPage.vue"
 import UserSettingPage from "../views/UserSettingPage.vue"
 import QRcodePage from "../views/QRcodePage.vue"
 import AdminPage from "../views/AdminPage.vue"
+import TestDataPage from "../views/TestDataPage.vue"
 import mapStore from "../store/index"
 import Toast from "../helper/toast"
 
@@ -33,7 +34,12 @@ const router = createRouter({
         {
             path:"/admin",
             name:'admin',
-            component: QRcodePage
+            component: AdminPage
+        },
+        {
+            path:"/test",
+            name:'test',
+            component: TestDataPage
         },
     ]
 })

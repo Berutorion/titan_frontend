@@ -28,6 +28,12 @@ function logout(){
      </router-link>	
 	</div>
   <div class="mobile-bottom-nav__item">		
+    <router-link class="mobile-bottom-nav__item-content"  to="/test">
+      <i class="bi bi-sliders2-vertical"></i>
+			testData
+     </router-link>	
+	</div>
+  <div class="mobile-bottom-nav__item">		
     <button class="mobile-bottom-nav__item-content btn" style="font-size: 12px;" @click="logout">
       <i class="bi bi-box-arrow-right"></i>
 			logout

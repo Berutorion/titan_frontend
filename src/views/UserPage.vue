@@ -13,8 +13,7 @@ import CardPageVue from '../components/CardPage.vue'
 
 const mapStore = inject("mapStore")
 const currentUser = toRef(mapStore.state,"currentUser")
-const AtWork = ref(false)
-const checkButton = ref("上班")
+const companyLocation = toRef(mapStore.testData,"companyLocation")
 const isHoliday = ref(false)
 const gpspage = ref(true)
 
@@ -75,13 +74,11 @@ onMounted( async() =>{
 }
 
  async function GPSAuthenticate(){
- //const company = {latitude : 25.057459343450386 , longitude : 121.61232863636423} //泰坦
-  const company = {latitude : 25.069332825223736, longitude :121.58932891026197} //圖書館 25.069332825223736, 121.58932891026197
   const position = await new Promise((resolve, reject) => {
           navigator.geolocation.getCurrentPosition(resolve, reject);
         });
  const current = {latitude : position.coords.latitude , longitude : position.coords.longitude}
- return getDistance(company,current) //單位公尺
+ return getDistance(companyLocation.value,current) //單位公尺
 }
 
 function switchPage(event) {
