@@ -7,7 +7,7 @@
         <!-- As a heading -->
 <nav class="navbar nav">
   <div class="container justify-content-center">
-    <span class="navbar-brand mb-0 h1">打卡專案</span>
+    <span class="navbar-brand mb-0 h1">出勤系統</span>
   </div>
 </nav>
 </template>

@@ -26,7 +26,7 @@ const UseApi = {
       }
     },
     //打卡
-    check : async(time,userId,atwork) =>{
+    check : async(time,userId) =>{
       try {
           const res = await instance.post(`/user/check`,{
           jobId:userId,

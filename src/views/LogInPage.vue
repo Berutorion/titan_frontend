@@ -70,18 +70,8 @@ async function login(){
                 <label for="floatingPassword">Password</label>
               </div>
 
-              <!-- <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" value="" id="rememberPasswordCheck">
-                <label class="form-check-label" for="rememberPasswordCheck">
-                  Remember password
-                </label>
-              </div> -->
-
               <div class="d-grid">
                 <button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" @click="login">Sign in</button>
-                <div class="text-center">
-                  <a class="small" href="/qrcode">Forgot password?</a>
-                </div>
               </div>
 
             </div>
