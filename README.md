@@ -27,15 +27,13 @@
     - 密碼修改
     
 **後台登入 :**
-- 瀏覽及編輯功能
-    - 員工出缺勤紀錄
-    - 員工出勤狀態修改
+- QRcode 生成
     
 ### 提供測試帳號
 
 * 一般使用者
-    * account: `user1@example.com` / password: `titaner`
-    * account: `user2@example.com` / password: `titaner`
+    * account: `user1` / password: `titaner`
+    * account: `user2` / password: `titaner`
     
 * 後臺管理員
     * account: `admin ` / password: `tiadmin`
@@ -67,12 +65,12 @@
 
 1. 使用git複製本專案
 ```
-git clone https://github.com/yoyo030/simple-twitter.git
+git clone https://github.com/Berutorion/titan_frontend.git
 ```
 
 2. 下載完畢後，進到專案資料夾
 ```
-cd simple-twitter
+cd titan_frontend
 ```
 
 3. 操作以下指令安裝所需的套件
@@ -82,19 +80,14 @@ npm install
 
 4. 在專案根目錄執行以下指令，在本地啟動專案
 ```
-npm run serve
+npm run dev
 ```
 5. 網頁成功連接後可使用`Local`或者`Network`的網址資訊在瀏覽器中開啟
 
 
 6. 開發完成後，於專案根目錄下使用此指令打包專案用於佈署
 ```
-npm run build
-```
-
-7. 另可使用以下指令對專案程式碼進行程式碼風格檢查
-```
-npm run lint
+./deploy.sh
 ```
 
 ---
