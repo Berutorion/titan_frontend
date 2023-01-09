@@ -3,7 +3,8 @@ import { reactive , readonly} from "vue";
 import UserApi from "../apis/UserApi"
 const state = reactive({
     currentUser:{},
-    token:""
+    token:"",
+    isLogin:false 
 })
 
 async function setcurrentUser() {
@@ -18,10 +19,13 @@ function setToken(token){
     state.token = token
 }
 
+function setIsLogin(value){
+    state.isLogin = value
+}
 
 export default {
     state:readonly(state),
     setcurrentUser,
-    setisAuthenticated,
-    setToken
+    setToken,
+    setIsLogin
 }

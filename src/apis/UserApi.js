@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Toast from '../helper/toast'
 const getToken = () =>localStorage.getItem("token")
 const instance = axios.create({
   // baseURL:"https://twitter-api.ap-northeast-1.elasticbeanstalk.com/api",
@@ -15,32 +16,25 @@ const UseApi = {
           name : loginData.account,
           password : loginData.password
         })
-        if(res.data.status === "success"){
+        if(res.status === 200){
           localStorage.removeItem('token')
           localStorage.setItem("token",res.data.token)
-        } 
+        }
         return res
       } catch (error) {
         return error
       }
     },
     //打卡
-    check : async(time,userId,AtWork) =>{
+    check : async(time,userId,atwork) =>{
       try {
-        if(AtWork.value){
-        //下班
-         const res = await instance.post(`/user/check`,{
+          const res = await instance.post(`/user/check`,{
           jobId:userId,
-          time
-        },{headers: { Authorization: `Bearer ${getToken()}` }})
-      }else{
-        //上班
-        const res = await instance.post(`/user/check`,{
-          jobId:userId,
-          time
-        },{headers: { Authorization: `Bearer ${getToken()}` }})
-        return true // AtWork.value
-      }
+          time},
+          {headers: { Authorization: `Bearer ${getToken()}` }})
+
+          if(!atwork) atwork=true
+          return {res:res,atwork}
       } catch (error) {
         throw new Error(error)
       }

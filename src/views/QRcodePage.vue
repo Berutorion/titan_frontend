@@ -8,7 +8,7 @@ import dateTime from "../helper/dateTime"
 const value = ref("")
 onMounted(async() =>{
   const qrcode = {
-    time:dateTime.timeFormat(),
+    date:dateTime.timeFormat(),
     authNum: await UserApi.gerQRauth(dateTime.timeFormat())
   }
 

@@ -2,13 +2,14 @@
 <script setup>
 import {onMounted, ref,inject,toRef} from 'vue'
 import dayjs from "dayjs"
-import router  from '../router'
 import UserApi from "../apis/UserApi"
 import getDistance from 'geolib/es/getDistance';
+import isHolidayfunc from "../helper/isHoliday"
+import Swal from 'sweetalert2' 
+import Toast from '../helper/toast';
 import qrReader from '../components/QRcodeReader.vue'
 import Clock from "../components/Clock.vue"
 import CardPageVue from '../components/CardPage.vue'
-import isHolidayfunc from "../helper/isHoliday"
 
 const mapStore = inject("mapStore")
 const currentUser = toRef(mapStore.state,"currentUser")
@@ -16,7 +17,6 @@ const AtWork = ref(false)
 const checkButton = ref("上班")
 const isHoliday = ref(false)
 const gpspage = ref(true)
-
 
 onMounted( async() =>{
   AtWork.value = currentUser.value.userData.AtWork
@@ -32,26 +32,63 @@ onMounted( async() =>{
   }
 })
 
-
  async function check(){
-  const distance = await GPSAuthenticate()
+  try {
+    Swal.fire({
+      icon:'info',
+      title:'打卡中...',
+      allowOutsideClick:false
+    })
+    Swal.showLoading()
+    const distance = await GPSAuthenticate()
+    Swal.close()
   if(distance < 400){
-    AtWork.value = UserApi.check(dayjs().format("YYYY/MM/DD HH:mm"),currentUser.value.userData.id,AtWork)
-    alert('打卡成功')
+    const {res , atwork} = await UserApi.check(dayjs().format("YYYY/MM/DD HH:mm"),currentUser.value.userData.id,AtWork)
+    AtWork.value = atwork
+    if(res.status === 200){
+      Toast.fire({
+        title:res.data.message,
+        icon:"success"
+      })
+      await mapStore.setcurrentUser()
+    }else{
+      Toast.fire({
+        title:res.data.message,
+        icon:"error"
+      })
+    }
   }else{
-    alert(`不再公司打卡範圍內，目前距離公司${distance}`)
+    Swal.fire({
+    title: 'Gps 打卡',
+    text: `不在公司打卡範圍內，目前距離公司${distance}`,
+    icon:"warning",
+    allowOutsideClick: false,
+        });
   }  
+  } catch (error) {
+    if(error instanceof GeolocationPositionError ){
+      Toast.fire({
+      title:"請開啟GPS權限，才能繼續打卡",
+      icon:"error"
+    })
+    }else{
+      Toast.fire({
+      title:error,
+      icon:"error"
+    })
+    }
+    
+  }
+
 }
 
  async function GPSAuthenticate(){
-  button.value = true
  //const company = {latitude : 25.057459343450386 , longitude : 121.61232863636423} //泰坦
-  const company = {latitude : 25.0693807 , longitude : 121.5889087} //圖書館
+  const company = {latitude : 25.061569349345806 , longitude : 121.58717196531568} //圖書館25.061569349345806, 121.58717196531568
   const position = await new Promise((resolve, reject) => {
           navigator.geolocation.getCurrentPosition(resolve, reject);
         });
  const current = {latitude : position.coords.latitude , longitude : position.coords.longitude}
- button.value = false
  return getDistance(company,current) //單位公尺
 }
 
@@ -83,12 +120,14 @@ function switchPage(event) {
 </ul>
  <CardPageVue v-if="gpspage" >
   <template #header>
-    <h1>Hello</h1>
+    <h1>
+    Hello,{{ currentUser.userData.name}}
+    </h1>
   </template>
   <template #body>
-    <div>
-      <span>上班時間:12:00</span>
-      <span>下班時間:12:00</span>
+    <div class="card-body">
+      <div class="card-title">上班時間:{{currentUser.userData.checkIn}}</div>
+      <div class="card-title">下班時間:{{currentUser.userData.checkOut}}</div>
     </div>
   </template>
   <template #footer>
@@ -103,28 +142,17 @@ function switchPage(event) {
   <template #body>
     <qrReader></qrReader>
   </template>
+  <template #footer>
+    <div></div>
+  </template>
  </CardPageVue>
 </div>
   </div>
  
-  
-
-    <!-- <div>
-      <p>User data</p>
-  <button @click='test'>Test</button>
-  <button v-if="AtWork" @click="check" v-bind:disabled="button">下班</button>
-  <button v-else @click="check" v-bind:disabled="button">上班</button>
-  <button @click="GPSAuthenticate">取得現在位置</button>
-  <button class="btn btn-primary" @click="logout">登出</button>
-    </div>   -->
-
-<!-- <button id="show-modal" @click="showModal = true">Show Modal</button> -->
-
-
 </template>
 
 
-<style>
+<style scoped>
 
 .btncard {
     height: 140px;

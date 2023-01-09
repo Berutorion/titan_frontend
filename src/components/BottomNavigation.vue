@@ -1,8 +1,12 @@
 
 <script setup>
 import router from '../router';
+import { inject } from 'vue';
 
+const mapStore = inject("mapStore")
 function logout(){
+  mapStore.setToken("")
+  mapStore.setIsLogin(false)
   localStorage.removeItem('token')
   router.push("/login")
 }

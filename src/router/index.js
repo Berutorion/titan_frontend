@@ -5,6 +5,7 @@ import UserSettingPage from "../views/UserSettingPage.vue"
 import QRcodePage from "../views/QRcodePage.vue"
 import AdminPage from "../views/AdminPage.vue"
 import mapStore from "../store/index"
+import Toast from "../helper/toast"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -42,21 +43,18 @@ router.beforeEach(async(to,from) =>{
     let isAuthenticated = false
     const token = mapStore.state.token
     const localToken = localStorage.getItem("token")
-
-    console.log("to",to ,"from" , from)
-    console.log(currentUser)
     
-    if(localToken && localToken === token && currentUser.userData){
+    if(localToken && localToken === token){
         isAuthenticated = true 
     }
 
     //  如果 token 無效則轉址到登入頁
   if (!isAuthenticated && !(to.name === 'login')) {   
     localStorage.removeItem('token')
-    // Toast.fire({
-    //   icon: "warning",
-    //   title: "請先登入使用者身分",
-    // });
+    Toast.fire({
+      icon: "warning",
+      title: "請先登入使用者身分",
+    });
     return{name:"login"}
   }
 })

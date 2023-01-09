@@ -3,28 +3,45 @@
 import {reactive,inject, toRef} from 'vue'
 import UserApi from "../apis/UserApi"
 import router  from '../router'
+import Toast from "../helper/toast"
 const loginData = reactive({account:"",password:"",})
 const mapStore = inject("mapStore")
 const currentUser = toRef(mapStore.state,"currentUser")
+
 async function login(){
   try {
     const res = await UserApi.Login(loginData)
-    if(res.data.status === 'success'){
+    if(res.status === 200){
       //更新目前使用者資料
     await mapStore.setcurrentUser()
-    await mapStore.setToken(res.data.token)
-      if(currentUser.value.userData.role === "user"){
+    console.log(currentUser.value)
+    mapStore.setToken(res.data.token)
+    mapStore.setIsLogin(true)
+    if(currentUser.value.userData.role === "user"){
       router.push('/')
+      Toast.fire({
+        title:res.data.message,
+        icon:"success"
+      })
     }else if(currentUser.value.userData.role === "admin"){
       router.push('/admin')
+      Toast.fire({
+        title:res.data.message,
+        icon:"success"
+      })
     }
     }else{
-      alert(res.data.message) 
+      Toast.fire({
+            title:res.data.message,
+            icon:"error"
+          })
     }
     
   } catch (error) {
-    console.log(error)
-    alert(error)
+    Toast.fire({
+            title:error,
+            icon:"error"
+          })
   }
 
 
@@ -46,11 +63,11 @@ async function login(){
             <!-- Sign In Form -->
             <div>
               <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" v-model="loginData.account">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" v-model.trim="loginData.account">
                 <label for="floatingInput">Email address</label>
               </div>
               <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" v-model="loginData.password">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" v-model.trim="loginData.password">
                 <label for="floatingPassword">Password</label>
               </div>
 
@@ -64,7 +81,7 @@ async function login(){
               <div class="d-grid">
                 <button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" @click="login">Sign in</button>
                 <div class="text-center">
-                  <a class="small" href="#">Forgot password?</a>
+                  <a class="small" href="/qrcode">Forgot password?</a>
                 </div>
               </div>
 
