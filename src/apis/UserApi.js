@@ -1,9 +1,7 @@
 import axios from 'axios'
-import dotenv from 'dotenv'
-dotenv.config()
 const getToken = () =>localStorage.getItem("token")
 const instance = axios.create({
-  baseURL:process.env.BASE_URL||"http://localhost:8080/api",
+  baseURL:import.meta.env.VITE_BASE_URL||"http://localhost:8080/api",
   validateStatus:(status) =>{ return status <=500},
   timeout:1000
 })
