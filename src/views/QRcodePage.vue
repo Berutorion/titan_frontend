@@ -9,7 +9,7 @@ const value = ref("")
 onMounted(async() =>{
   const qrcode = {
     date:dateTime.timeFormat(),
-    authNum: await UserApi.gerQRauth(dateTime.timeFormat())
+    authNum: "fakeQrcode" //await UserApi.gerQRauth(dateTime.timeFormat())
   }
 
   value.value =JSON.stringify(qrcode)

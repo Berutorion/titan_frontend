@@ -2,8 +2,8 @@ import axios from 'axios'
 import Toast from '../helper/toast'
 const getToken = () =>localStorage.getItem("token")
 const instance = axios.create({
-  baseURL:"https://twitter-api.ap-northeast-1.elasticbeanstalk.com/api",
- // baseURL:"http://localhost:8080/api",
+ // baseURL:"https://twitter-api.ap-northeast-1.elasticbeanstalk.com/api",
+  baseURL:"http://localhost:8080/api",
   validateStatus:(status) =>{ return status <=500},
   timeout:1000
 })
@@ -60,9 +60,9 @@ const UseApi = {
       }
     },
     //驗證
-    getUser : async() =>{
+    getUser : async(time) =>{
       try {
-        const res  = await instance.get("/user" ,{
+        const res  = await instance.get(`/user?time=${time}` ,{
           headers: { Authorization: `Bearer ${getToken()}` }
         })
         return res.data

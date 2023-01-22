@@ -16,7 +16,7 @@ const testData = reactive({
 
 async function setcurrentUser() {
     try {
-        state.currentUser = await UserApi.getUser()
+        state.currentUser = await UserApi.getUser(dayjs().format("YYYY/MM/DD HH:mm"))
     } catch (error) {
         
     }

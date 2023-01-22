@@ -4,7 +4,7 @@ import dayjs from "dayjs"
 import mapStore from "../store"
 
 export default () => {
-    const now = dayjs(mapStore.testData.day)
+    const now = dayjs()
     let start = 0
     let end = calendar.length
     let middle = Math.floor((end+start)/2)
